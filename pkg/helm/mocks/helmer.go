@@ -7,6 +7,7 @@ import (
 	helm "github.com/jenkins-x/jx/pkg/helm"
 	pegomock "github.com/petergtz/pegomock"
 	"reflect"
+	"time"
 )
 
 type MockHelmer struct {
@@ -438,26 +439,45 @@ func (mock *MockHelmer) Version(_param0 bool) (string, error) {
 }
 
 func (mock *MockHelmer) VerifyWasCalledOnce() *VerifierHelmer {
-	return &VerifierHelmer{mock, pegomock.Times(1), nil}
+	return &VerifierHelmer{
+		mock:                   mock,
+		invocationCountMatcher: pegomock.Times(1),
+	}
 }
 
 func (mock *MockHelmer) VerifyWasCalled(invocationCountMatcher pegomock.Matcher) *VerifierHelmer {
-	return &VerifierHelmer{mock, invocationCountMatcher, nil}
+	return &VerifierHelmer{
+		mock:                   mock,
+		invocationCountMatcher: invocationCountMatcher,
+	}
 }
 
 func (mock *MockHelmer) VerifyWasCalledInOrder(invocationCountMatcher pegomock.Matcher, inOrderContext *pegomock.InOrderContext) *VerifierHelmer {
-	return &VerifierHelmer{mock, invocationCountMatcher, inOrderContext}
+	return &VerifierHelmer{
+		mock:                   mock,
+		invocationCountMatcher: invocationCountMatcher,
+		inOrderContext:         inOrderContext,
+	}
+}
+
+func (mock *MockHelmer) VerifyWasCalledEventually(invocationCountMatcher pegomock.Matcher, timeout time.Duration) *VerifierHelmer {
+	return &VerifierHelmer{
+		mock:                   mock,
+		invocationCountMatcher: invocationCountMatcher,
+		timeout:                timeout,
+	}
 }
 
 type VerifierHelmer struct {
 	mock                   *MockHelmer
 	invocationCountMatcher pegomock.Matcher
 	inOrderContext         *pegomock.InOrderContext
+	timeout                time.Duration
 }
 
 func (verifier *VerifierHelmer) AddRepo(_param0 string, _param1 string) *Helmer_AddRepo_OngoingVerification {
 	params := []pegomock.Param{_param0, _param1}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "AddRepo", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "AddRepo", params, verifier.timeout)
 	return &Helmer_AddRepo_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -488,7 +508,7 @@ func (c *Helmer_AddRepo_OngoingVerification) GetAllCapturedArguments() (_param0 
 
 func (verifier *VerifierHelmer) BuildDependency() *Helmer_BuildDependency_OngoingVerification {
 	params := []pegomock.Param{}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "BuildDependency", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "BuildDependency", params, verifier.timeout)
 	return &Helmer_BuildDependency_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -505,7 +525,7 @@ func (c *Helmer_BuildDependency_OngoingVerification) GetAllCapturedArguments() {
 
 func (verifier *VerifierHelmer) DecryptSecrets(_param0 string) *Helmer_DecryptSecrets_OngoingVerification {
 	params := []pegomock.Param{_param0}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "DecryptSecrets", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "DecryptSecrets", params, verifier.timeout)
 	return &Helmer_DecryptSecrets_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -532,7 +552,7 @@ func (c *Helmer_DecryptSecrets_OngoingVerification) GetAllCapturedArguments() (_
 
 func (verifier *VerifierHelmer) DeleteRelease(_param0 string, _param1 string, _param2 bool) *Helmer_DeleteRelease_OngoingVerification {
 	params := []pegomock.Param{_param0, _param1, _param2}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "DeleteRelease", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "DeleteRelease", params, verifier.timeout)
 	return &Helmer_DeleteRelease_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -567,7 +587,7 @@ func (c *Helmer_DeleteRelease_OngoingVerification) GetAllCapturedArguments() (_p
 
 func (verifier *VerifierHelmer) Env() *Helmer_Env_OngoingVerification {
 	params := []pegomock.Param{}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "Env", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "Env", params, verifier.timeout)
 	return &Helmer_Env_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -584,7 +604,7 @@ func (c *Helmer_Env_OngoingVerification) GetAllCapturedArguments() {
 
 func (verifier *VerifierHelmer) FetchChart(_param0 string, _param1 *string, _param2 bool, _param3 string, _param4 string, _param5 string, _param6 string) *Helmer_FetchChart_OngoingVerification {
 	params := []pegomock.Param{_param0, _param1, _param2, _param3, _param4, _param5, _param6}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "FetchChart", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "FetchChart", params, verifier.timeout)
 	return &Helmer_FetchChart_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -635,7 +655,7 @@ func (c *Helmer_FetchChart_OngoingVerification) GetAllCapturedArguments() (_para
 
 func (verifier *VerifierHelmer) FindChart() *Helmer_FindChart_OngoingVerification {
 	params := []pegomock.Param{}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "FindChart", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "FindChart", params, verifier.timeout)
 	return &Helmer_FindChart_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -652,7 +672,7 @@ func (c *Helmer_FindChart_OngoingVerification) GetAllCapturedArguments() {
 
 func (verifier *VerifierHelmer) HelmBinary() *Helmer_HelmBinary_OngoingVerification {
 	params := []pegomock.Param{}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "HelmBinary", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "HelmBinary", params, verifier.timeout)
 	return &Helmer_HelmBinary_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -669,7 +689,7 @@ func (c *Helmer_HelmBinary_OngoingVerification) GetAllCapturedArguments() {
 
 func (verifier *VerifierHelmer) Init(_param0 bool, _param1 string, _param2 string, _param3 bool) *Helmer_Init_OngoingVerification {
 	params := []pegomock.Param{_param0, _param1, _param2, _param3}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "Init", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "Init", params, verifier.timeout)
 	return &Helmer_Init_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -708,7 +728,7 @@ func (c *Helmer_Init_OngoingVerification) GetAllCapturedArguments() (_param0 []b
 
 func (verifier *VerifierHelmer) InstallChart(_param0 string, _param1 string, _param2 string, _param3 *string, _param4 *int, _param5 []string, _param6 []string, _param7 string, _param8 string, _param9 string) *Helmer_InstallChart_OngoingVerification {
 	params := []pegomock.Param{_param0, _param1, _param2, _param3, _param4, _param5, _param6, _param7, _param8, _param9}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "InstallChart", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "InstallChart", params, verifier.timeout)
 	return &Helmer_InstallChart_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -771,7 +791,7 @@ func (c *Helmer_InstallChart_OngoingVerification) GetAllCapturedArguments() (_pa
 
 func (verifier *VerifierHelmer) IsRepoMissing(_param0 string) *Helmer_IsRepoMissing_OngoingVerification {
 	params := []pegomock.Param{_param0}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "IsRepoMissing", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "IsRepoMissing", params, verifier.timeout)
 	return &Helmer_IsRepoMissing_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -798,7 +818,7 @@ func (c *Helmer_IsRepoMissing_OngoingVerification) GetAllCapturedArguments() (_p
 
 func (verifier *VerifierHelmer) Lint() *Helmer_Lint_OngoingVerification {
 	params := []pegomock.Param{}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "Lint", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "Lint", params, verifier.timeout)
 	return &Helmer_Lint_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -815,7 +835,7 @@ func (c *Helmer_Lint_OngoingVerification) GetAllCapturedArguments() {
 
 func (verifier *VerifierHelmer) ListCharts() *Helmer_ListCharts_OngoingVerification {
 	params := []pegomock.Param{}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "ListCharts", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "ListCharts", params, verifier.timeout)
 	return &Helmer_ListCharts_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -832,7 +852,7 @@ func (c *Helmer_ListCharts_OngoingVerification) GetAllCapturedArguments() {
 
 func (verifier *VerifierHelmer) ListRepos() *Helmer_ListRepos_OngoingVerification {
 	params := []pegomock.Param{}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "ListRepos", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "ListRepos", params, verifier.timeout)
 	return &Helmer_ListRepos_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -849,7 +869,7 @@ func (c *Helmer_ListRepos_OngoingVerification) GetAllCapturedArguments() {
 
 func (verifier *VerifierHelmer) PackageChart() *Helmer_PackageChart_OngoingVerification {
 	params := []pegomock.Param{}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "PackageChart", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "PackageChart", params, verifier.timeout)
 	return &Helmer_PackageChart_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -866,7 +886,7 @@ func (c *Helmer_PackageChart_OngoingVerification) GetAllCapturedArguments() {
 
 func (verifier *VerifierHelmer) RemoveRepo(_param0 string) *Helmer_RemoveRepo_OngoingVerification {
 	params := []pegomock.Param{_param0}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "RemoveRepo", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "RemoveRepo", params, verifier.timeout)
 	return &Helmer_RemoveRepo_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -893,7 +913,7 @@ func (c *Helmer_RemoveRepo_OngoingVerification) GetAllCapturedArguments() (_para
 
 func (verifier *VerifierHelmer) RemoveRequirementsLock() *Helmer_RemoveRequirementsLock_OngoingVerification {
 	params := []pegomock.Param{}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "RemoveRequirementsLock", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "RemoveRequirementsLock", params, verifier.timeout)
 	return &Helmer_RemoveRequirementsLock_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -910,7 +930,7 @@ func (c *Helmer_RemoveRequirementsLock_OngoingVerification) GetAllCapturedArgume
 
 func (verifier *VerifierHelmer) SearchChartVersions(_param0 string) *Helmer_SearchChartVersions_OngoingVerification {
 	params := []pegomock.Param{_param0}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "SearchChartVersions", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "SearchChartVersions", params, verifier.timeout)
 	return &Helmer_SearchChartVersions_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -937,7 +957,7 @@ func (c *Helmer_SearchChartVersions_OngoingVerification) GetAllCapturedArguments
 
 func (verifier *VerifierHelmer) SearchCharts(_param0 string) *Helmer_SearchCharts_OngoingVerification {
 	params := []pegomock.Param{_param0}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "SearchCharts", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "SearchCharts", params, verifier.timeout)
 	return &Helmer_SearchCharts_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -964,7 +984,7 @@ func (c *Helmer_SearchCharts_OngoingVerification) GetAllCapturedArguments() (_pa
 
 func (verifier *VerifierHelmer) SetCWD(_param0 string) *Helmer_SetCWD_OngoingVerification {
 	params := []pegomock.Param{_param0}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "SetCWD", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "SetCWD", params, verifier.timeout)
 	return &Helmer_SetCWD_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -991,7 +1011,7 @@ func (c *Helmer_SetCWD_OngoingVerification) GetAllCapturedArguments() (_param0 [
 
 func (verifier *VerifierHelmer) SetHelmBinary(_param0 string) *Helmer_SetHelmBinary_OngoingVerification {
 	params := []pegomock.Param{_param0}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "SetHelmBinary", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "SetHelmBinary", params, verifier.timeout)
 	return &Helmer_SetHelmBinary_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -1018,7 +1038,7 @@ func (c *Helmer_SetHelmBinary_OngoingVerification) GetAllCapturedArguments() (_p
 
 func (verifier *VerifierHelmer) SetHost(_param0 string) *Helmer_SetHost_OngoingVerification {
 	params := []pegomock.Param{_param0}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "SetHost", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "SetHost", params, verifier.timeout)
 	return &Helmer_SetHost_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -1045,7 +1065,7 @@ func (c *Helmer_SetHost_OngoingVerification) GetAllCapturedArguments() (_param0 
 
 func (verifier *VerifierHelmer) StatusRelease(_param0 string, _param1 string) *Helmer_StatusRelease_OngoingVerification {
 	params := []pegomock.Param{_param0, _param1}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "StatusRelease", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "StatusRelease", params, verifier.timeout)
 	return &Helmer_StatusRelease_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -1076,7 +1096,7 @@ func (c *Helmer_StatusRelease_OngoingVerification) GetAllCapturedArguments() (_p
 
 func (verifier *VerifierHelmer) StatusReleases(_param0 string) *Helmer_StatusReleases_OngoingVerification {
 	params := []pegomock.Param{_param0}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "StatusReleases", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "StatusReleases", params, verifier.timeout)
 	return &Helmer_StatusReleases_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -1103,7 +1123,7 @@ func (c *Helmer_StatusReleases_OngoingVerification) GetAllCapturedArguments() (_
 
 func (verifier *VerifierHelmer) UpdateRepo() *Helmer_UpdateRepo_OngoingVerification {
 	params := []pegomock.Param{}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "UpdateRepo", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "UpdateRepo", params, verifier.timeout)
 	return &Helmer_UpdateRepo_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -1120,7 +1140,7 @@ func (c *Helmer_UpdateRepo_OngoingVerification) GetAllCapturedArguments() {
 
 func (verifier *VerifierHelmer) UpgradeChart(_param0 string, _param1 string, _param2 string, _param3 *string, _param4 bool, _param5 *int, _param6 bool, _param7 bool, _param8 []string, _param9 []string, _param10 string, _param11 string, _param12 string) *Helmer_UpgradeChart_OngoingVerification {
 	params := []pegomock.Param{_param0, _param1, _param2, _param3, _param4, _param5, _param6, _param7, _param8, _param9, _param10, _param11, _param12}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "UpgradeChart", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "UpgradeChart", params, verifier.timeout)
 	return &Helmer_UpgradeChart_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
@@ -1195,7 +1215,7 @@ func (c *Helmer_UpgradeChart_OngoingVerification) GetAllCapturedArguments() (_pa
 
 func (verifier *VerifierHelmer) Version(_param0 bool) *Helmer_Version_OngoingVerification {
 	params := []pegomock.Param{_param0}
-	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "Version", params)
+	methodInvocations := pegomock.GetGenericMockFrom(verifier.mock).Verify(verifier.inOrderContext, verifier.invocationCountMatcher, "Version", params, verifier.timeout)
 	return &Helmer_Version_OngoingVerification{mock: verifier.mock, methodInvocations: methodInvocations}
 }
 
