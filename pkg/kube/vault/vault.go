@@ -19,10 +19,10 @@ import (
 const (
 	BankVaultsOperatorImage = "banzaicloud/vault-operator"
 	BankVaultsImage         = "banzaicloud/bank-vaults"
-	BankVaultsImageTag      = "0.4.7"
+	BankVaultsImageTag      = "master"
 	defaultNumVaults        = 1
 	vaultImage              = "vault"
-	vaultImageTag           = "0.11.6"
+	vaultImageTag           = "1.1.1"
 	gcpServiceAccountEnv    = "GOOGLE_APPLICATION_CREDENTIALS"
 	gcpServiceAccountPath   = "/etc/gcp/service-account.json"
 
