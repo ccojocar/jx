@@ -5,6 +5,7 @@ import (
 
 	"github.com/banzaicloud/bank-vaults/operator/pkg/apis/vault/v1alpha1"
 	"github.com/banzaicloud/bank-vaults/operator/pkg/client/clientset/versioned"
+	vaultapi "github.com/hashicorp/vault/api"
 	"github.com/jenkins-x/jx/pkg/kube"
 	"github.com/jenkins-x/jx/pkg/kube/cluster"
 	"github.com/jenkins-x/jx/pkg/kube/serviceaccount"
@@ -17,9 +18,9 @@ import (
 )
 
 const (
-	BankVaultsOperatorImage = "banzaicloud/vault-operator"
-	BankVaultsImage         = "banzaicloud/bank-vaults"
-	BankVaultsImageTag      = "master"
+	BankVaultsOperatorImage = "cosmincojocar/vault-operator"
+	BankVaultsImage         = "cosmincojocar/bank-vaults"
+	BankVaultsImageTag      = "v2"
 	defaultNumVaults        = 1
 	vaultImage              = "vault"
 	vaultImageTag           = "1.1.1"
@@ -34,6 +35,8 @@ const (
 	vaultAuthTTL  = "1h"
 
 	vaultRoleName = "vault-auth"
+
+	vaultSecretEngines = "secrets"
 )
 
 // Vault stores some details of a Vault resource
@@ -124,6 +127,12 @@ type Telemetry struct {
 type Storage struct {
 	GCS      *GCSConfig      `json:"gcs,omitempty"`
 	DynamoDB *DynamoDBConfig `json:"dynamodb,omitempty"`
+}
+
+// SecretEngine configuration for secret engine
+type SecretEngine struct {
+	vaultapi.MountInput
+	Path string `json:"path"`
 }
 
 // SystemVaultName returns the name of the system vault based on the cluster name
@@ -286,6 +295,23 @@ func InitializeVault(kubeClient kubernetes.Interface, name string, ns string, au
 					{
 						Name:  vault.PathRulesName,
 						Rules: vaultRule,
+					},
+				},
+				vaultSecretEngines: []SecretEngine{
+					{
+						Path: vault.DefaultSecretsPath,
+						MountInput: vaultapi.MountInput{
+							Type:        "kv",
+							Description: "KV secret engine",
+							Local:       false,
+							SealWrap:    false,
+							Options: map[string]string{
+								"version": "2",
+							},
+							Config: vaultapi.MountConfigInput{
+								ForceNoCache: true,
+							},
+						},
 					},
 				},
 			},
